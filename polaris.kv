@@ -1,0 +1,292 @@
+#:kivy 1.11.0
+
+<ItemConfirm>:
+    on_release: root.set_icon(check)
+
+    CheckboxLeftWidget:
+        id: check
+        group: "check"
+        
+<CountPerHourContent>:
+    orientation: 'vertical'
+    spacing: '1dp'
+    size_hint_y: None
+    height: '220dp'
+
+    MDLabel:
+        text: app.goalCountValue
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        MDRectangleFlatButton:
+            text: '7'
+            on_release: app.keypad(7)
+        MDRectangleFlatButton:
+            text: '8'
+            on_release: app.keypad(8)
+        MDRectangleFlatButton:
+            text: '9'
+            on_release: app.keypad(9)
+    MDBoxLayout:
+        orientation: 'horizontal'
+        MDRectangleFlatButton:
+            text: '4'
+            on_release: app.keypad(4)
+        MDRectangleFlatButton:
+            text: '5'
+            on_release: app.keypad(5)
+        MDRectangleFlatButton:
+            text: '6'
+            on_release: app.keypad(6)
+    MDBoxLayout:
+        orientation: 'horizontal'
+        MDRectangleFlatButton:
+            text: '1'
+            on_release: app.keypad(1)
+        MDRectangleFlatButton:
+            text: '2'
+            on_release: app.keypad(2)
+        MDRectangleFlatButton:
+            text: '3'
+            on_release: app.keypad(3)
+    MDBoxLayout:
+        orientation: 'horizontal'
+        MDRectangleFlatButton:
+            text: '<'
+            on_release: app.keypadBackspace()
+        MDRectangleFlatButton:
+            text: '0'
+            on_release: app.keypad(0)
+        MDRectangleFlatButton:
+            text: '.'
+            on_release: app.keypadDecimal()
+
+<PerceptivePolaris>:
+    orientation: 'vertical'
+    size: root.width, root.height
+    padding: 10
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        #md_bg_color: app.theme_cls.primary_color
+        size_hint: 1, .15
+        #padding: 10
+        spacing: 20
+
+        Button:
+            size_hint: .2, 1
+            background_color: 1, 1, 1, 0
+            on_press: app.exitApp()
+            Image:
+                source: 'assets/logo.png'
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+        
+        MDLabel:
+            text: app.screenTitleDisplay
+            font_size: 36
+            bold: True
+
+    ScreenManager:
+        id: sm
+        MainScreen:
+        SystemStopScreen:
+        DowntimeScreen:
+        AnalysisScreen:
+
+<MainScreen>:
+    name: 'main'
+    MDBoxLayout:
+        orientation: 'horizontal'
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: 50
+            spacing: 10
+            md_bg_color: 0.9, 0.9, 0.9, 1
+
+            MDRaisedButton:
+                id: btnShowProduct
+                text: 'Product'
+                on_release: app.showProductSelection()
+                font_size: 24
+                size_hint: 1, 1
+            MDRaisedButton:
+                text: 'Count Per Hour'
+                on_release: app.showCountPerHourSelector()
+                font_size: 24
+                size_hint: 1, 1
+            MDRaisedButton:
+                text: 'Operator'
+                on_release: app.showOperatorSelection()
+                font_size: 24
+                size_hint: 1, 1
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: 10
+            spacing: 10
+            md_bg_color: (33/255, 128/255, 24/255, 1) if app.currentRunningState else (200/255, 66/255, 66/255, 1)
+
+            MDLabel:
+                text: 'System Running' if app.currentRunningState else 'System Stopped'
+                halign: 'center'
+                font_size: 36
+                bold: True
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+
+            MDBoxLayout:
+                orientation: 'horizontal'
+                MDLabel:
+                    text: 'Current Product:'
+                    bold: True
+                MDLabel:
+                    text: app.productNameDisplay
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+            
+            MDBoxLayout:
+                orientation: 'horizontal'
+                MDLabel:
+                    text: 'Target Rate'
+                    bold: True
+                MDLabel:
+                    text: app.goalCountDisplay
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+
+            MDBoxLayout:
+                orientation: 'horizontal'
+                MDLabel:
+                    text: 'Total Good Count'
+                    bold: True
+                MDLabel:
+                    text: app.goodCountDisplay
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+            MDBoxLayout:
+                orientation: 'horizontal'
+                MDLabel:
+                    text: 'Total Reject Count'
+                    bold: True
+                MDLabel:
+                    text: app.rejectCountDisplay
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+
+            MDBoxLayout:
+                orientation: 'horizontal'
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    MDLabel:
+                        text: 'Uptime'
+                        bold: True
+                    MDLabel:
+                        text: app.uptimeDisplay
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 1
+
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    MDLabel:
+                        text: 'Downtime'
+                        bold: True
+                    MDLabel:
+                        text: app.downtimeDisplay
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 1
+
+            MDLabel:
+                text: 'Downtime Reason: ' + app.downtimeReasonDisplay
+                visible: not app.currentRunningState
+                halign: 'center'
+                size_hint_x: 1 if self.visible else 0
+                opacity: 1 if self.visible else 0
+                disabled: not self.visible
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+
+            
+
+
+<SystemStopScreen>:
+    name: 'system_stop'
+    MDBoxLayout:
+        orientation: 'vertical'
+        md_bg_color: 173/255, 96/255, 14/255, 1
+
+        MDLabel:
+            size_hint: 1, .2
+            text: 'REASON FOR STOP'
+            halign: 'center'
+            font_size: 36
+            bold: True
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+
+            MDStackLayout:
+                spacing: 10
+                padding: 50
+                id: primaryReasonWidget
+
+            MDStackLayout:
+                spacing: 10
+                padding: 50
+                id: secondaryReasonWidget
+    
+
+
+
+<DowntimeScreen>:
+    name: 'downtime'
+    MDBoxLayout:
+        orientation: 'vertical'
+        md_bg_color: 0.8, 0.8, 0.8, 1
+        padding: 25
+        spacing: 10
+
+        MDLabel:
+            text: app.downtimeReasonDisplay
+            size_hint: 1, .2
+            halign: 'center'
+            #font_size: 36
+            #bold: True
+
+        MDLabel:
+            text: 'THANK YOU'
+            size_hint: 1, .6
+            halign: 'center'
+            font_size: 48
+            bold: True
+
+        MDLabel:
+            text: 'Downtime Counter: ' + app.downtimeDisplay
+            size_hint: 1, .1
+            halign: 'center'
+            #font_size: 36
+            #bold: True
+
+        Button:
+            text: 'Return to Main'
+            halign: 'center'
+            size_hint: 1, .1
+            on_release: app.navigateToMain()
+
+#<AnalysisScreen>:
+#    name: 'analysis'
+#    MDBoxLayout:
+#        orientation: 'vertical'
+#
+#        MDLabel:
+#            text: 'Downtime Analysis'
+#            size_hint: 1, .2
+#            halign: 'center'
+#            font_size: 36
+#            bold: True
+#
+#        MyFigure:
+#            size_hint: 1, .7
+
+
